@@ -97,7 +97,7 @@
 
                 data.forEach(item => {
                     const opt = document.createElement("option");
-                    opt.value = item.idTypeClient;
+                    opt.value = item.id;
                     opt.textContent = item.typeClient;
                     select.appendChild(opt);
                 });

@@ -85,5 +85,24 @@ CREATE TABLE banque_HistoriqueMouvementSolde(
     FOREIGN KEY (idTypeMouvementSolde) REFERENCES banque_TypeMouvementSolde(id)
 );
 
+CREATE TABLE banque_Prevision(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idPret INT,
+    mois INT,
+    annee INT,
+    montantFinal DECIMAL(10,2),
+    FOREIGN KEY (idPret) REFERENCES banque_Pret(id)
+);
+
+CREATE TABLE banque_Realisation(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mois INT,
+    annee INT,
+    montant DECIMAL(10,2),
+);
+
 ALTER TABLE banque_Client
 ADD COLUMN numeroIdentification VARCHAR(255);
+
+ALTER TABLE banque_Pret
+ADD COLUMN nbrMois INT;
