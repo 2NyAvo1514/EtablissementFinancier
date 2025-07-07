@@ -2,6 +2,12 @@
 require_once __DIR__ . '/../controllers/ClientController.php';
 require_once __DIR__ . '/../controllers/TypeClientController.php';
 require_once __DIR__ . '/../controllers/DashboardController.php'; 
+require_once __DIR__ . '/../controllers/TauxController.php'; 
+require_once __DIR__ . '/../controllers/TypePretController.php'; 
+require_once __DIR__ . '/../controllers/FondController.php'; 
+
+
+
 
 Flight::route('GET /clients', ['ClientController', 'getAll']);
 Flight::route('GET /clients/@id', ['ClientController', 'getById']);
@@ -15,4 +21,12 @@ Flight::route('DELETE /typeClients/@id', ['TypeClientController', 'delete']);
 
 Flight::route('GET /dashboard/interets', ['DashboardController', 'getInteretsInterval']);
 Flight::route('GET /dashboard/interetsRealisation', ['DashboardController', 'getInteretsRealisationInterval']);
+
+Flight::route('GET /typePret', ['TypePretController', 'getAll']);
+Flight::route('POST /taux', ['TauxController', 'create']);
+
+Flight::route('POST /fond', ['FondController', 'create']);
+
+
+
 

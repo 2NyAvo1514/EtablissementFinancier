@@ -41,7 +41,7 @@
     <input type="text" name="nom" id="nomClient">
     <br>
     <label for="mail">E-mail</label>
-    <input type="mail" name="mail" id="mail">
+    <input type="email" name="mail" id="mail">
     <br>
     <label for="mdp">Mot de passe</label>
     <input type="password" name="mdp" id="mdp">
@@ -55,7 +55,7 @@
     </select>
     <br>
     <label for="numeroIdentification">Insérer votre numéro d'identification (CIN ou NIF)</label>
-    <input type="text" id="numeroIdentification" id="numeroIdentification">
+    <input type="text" id="numeroIdentification" name="numeroIdentification">
     <button onclick='createClient()'>Ajouter</button>
 
     <script>
@@ -81,8 +81,9 @@
             const mdp = document.getElementById("mdp").value;
             const dateNaissance = document.getElementById("dateNaissance").value;
             const numeroIdentification = document.getElementById("numeroIdentification").value;
+            const idTypeClient = document.getElementById("idTypeClient").value;
 
-            const data = `nom=${encodeURIComponent(nom)}&mail=${encodeURIComponent(mail)}&mdp=${encodeURIComponent(mdp)}&dateNaissance=${encodeURIComponent(dateNaissance)}&numeroIdentification=${encodeURIComponent(numeroIdentification)}`;
+            const data = `nom=${encodeURIComponent(nom)}&mail=${encodeURIComponent(mail)}&mdp=${encodeURIComponent(mdp)}&dateNaissance=${encodeURIComponent(dateNaissance)}&numeroIdentification=${encodeURIComponent(numeroIdentification)}&idTypeClient=${encodeURIComponent(idTypeClient)}`;
 
             ajax("POST", "/clients", data, () => {
                 // resetForm();
