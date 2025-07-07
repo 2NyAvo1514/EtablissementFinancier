@@ -2,8 +2,6 @@
 require_once __DIR__ . '/../models/ClientModel.php';
 require_once __DIR__ . '/../helpers/Utils.php';
 
-
-
 class ClientController {
     public static function getAll() {
         $clients = ClientModel::getAll();
