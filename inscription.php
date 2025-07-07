@@ -40,7 +40,7 @@
             <br>
             <input type="text" id="numeroIdentification" name="numeroIdentification" required><br>
             <br>
-            <button onclick="createClient()">Ajouter</button>
+            <button onclick="createClient()" class="ajouter">Ajouter</button>
         </main>
     </div>
 

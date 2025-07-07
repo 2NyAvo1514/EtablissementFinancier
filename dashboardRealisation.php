@@ -14,7 +14,7 @@
         <?php include 'navbar.html'; ?>
         <main class="content">
             <h1>Réalisation des intérêts par mois</h1>
-<br>
+            <br>
             <label for="moisDebut">Mois Début</label>
             <br>
             <input type="number" name="moisDebut" id="moisDebut" min="1" max="12">
@@ -30,9 +30,9 @@
             <label for="anneeFin">Année Fin</label>
             <br>
             <input type="number" name="anneeFin" id="anneeFin">
-<br>
+            <br>
             <button onclick="chargerTableau()">Voir le tableau</button>
-
+            <h3 id="totalInteret">Total des intérêts : 0 Ar</h3>
             <table id="result">
                 <thead>
                     <tr>
@@ -84,8 +84,11 @@
 
                 const labels = [];
                 const valeursInterets = [];
+                let total = 0;
 
                 data.forEach(l => {
+                    const interet = Number(l.interet || 0);
+                    total += interet;
                     const tr = document.createElement("tr");
                     tr.innerHTML = `
                         <td>${l.mois}</td>
@@ -100,6 +103,8 @@
                     labels.push(`${l.mois}/${l.annee}`);
                     valeursInterets.push(Number(l.interet || 0));
                 });
+                document.getElementById("totalInteret").textContent =
+                    "Total des intérêts : " + total.toFixed(2) + " Ar";
 
                 afficherGraphique(labels, valeursInterets);
             });

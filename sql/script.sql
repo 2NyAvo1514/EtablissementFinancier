@@ -117,13 +117,7 @@ CREATE TABLE
         FOREIGN KEY (idPret) REFERENCES banque_Pret (id)
     );
 
-CREATE TABLE
-    banque_Realisation (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        mois INT,
-        annee INT,
-        montant DECIMAL(10, 2),
-    );
+
 
 ALTER TABLE banque_Client
 ADD COLUMN numeroIdentification VARCHAR(255);
@@ -133,3 +127,13 @@ ADD COLUMN nbrMois INT;
 
 CREATE TABLE
     banque_Fond (id INT AUTO_INCREMENT PRIMARY KEY, solde BIGINT);
+
+CREATE TABLE banque_Delais (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idTypeClient INT,
+    idTypePret INT,
+    duree INT, 
+    dateDelais DATE,
+    FOREIGN KEY (idTypeClient) REFERENCES banque_TypeClient(id),
+    FOREIGN KEY (idTypePret) REFERENCES banque_TypePret(id)
+);

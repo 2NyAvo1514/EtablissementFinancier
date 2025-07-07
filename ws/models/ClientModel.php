@@ -18,6 +18,14 @@ class ClientModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public static function getByNum($num)
+    {
+        $db = getDB();
+        $stmt = $db->prepare("SELECT * FROM banque_Client WHERE numeroIdentification = ?");
+        $stmt->execute([$num]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public static function create($data)
     {
         $db = getDB();
