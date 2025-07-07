@@ -4,7 +4,9 @@ require_once __DIR__ . '/../controllers/TypeClientController.php';
 require_once __DIR__ . '/../controllers/DashboardController.php'; 
 require_once __DIR__ . '/../controllers/TauxController.php'; 
 require_once __DIR__ . '/../controllers/TypePretController.php'; 
-require_once __DIR__ . '/../controllers/FondController.php'; 
+require_once __DIR__ . '/../controllers/FondController.php';
+require_once __DIR__ . '/../controllers/AssuranceController.php'; 
+
 
 
 
@@ -26,6 +28,9 @@ Flight::route('GET /typePret', ['TypePretController', 'getAll']);
 Flight::route('POST /taux', ['TauxController', 'create']);
 
 Flight::route('POST /fond', ['FondController', 'create']);
+
+Flight::route('POST /assurance', ['AssuranceController', 'create']);
+
 
 
 

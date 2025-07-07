@@ -6,39 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prévision des intérêts</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>Prévision des intérêts par mois</h1>
+    <div class="container">
+        <?php include 'navbar.html'; ?>
+        <main class="content">
+            <h1>Prévision des intérêts par mois</h1>
 
-    <label for="moisDebut">Mois Début</label>
-    <input type="number" name="moisDebut" id="moisDebut" min="1" max="12">
-    <label for="anneeDebut">Année Début</label>
-    <input type="number" name="anneeDebut" id="anneeDebut">
+            <label for="moisDebut">Mois Début</label>
+            <br>
+            <input type="number" name="moisDebut" id="moisDebut" min="1" max="12">
+            <br>
+            <label for="anneeDebut">Année Début</label>
+            <br>
+            <input type="number" name="anneeDebut" id="anneeDebut">
+<br>
+            <label for="moisFin">Mois Fin</label>
+            <br>
+            <input type="number" name="moisFin" id="moisFin" min="1" max="12">
+            <br>
+            <label for="anneeFin">Année Fin</label>
+            <br>
+            <input type="number" name="anneeFin" id="anneeFin">
+<br>
+            <button onclick="chargerTableau()">Voir le tableau</button>
 
-    <label for="moisFin">Mois Fin</label>
-    <input type="number" name="moisFin" id="moisFin" min="1" max="12">
-    <label for="anneeFin">Année Fin</label>
-    <input type="number" name="anneeFin" id="anneeFin">
+            <table id="result">
+                <thead>
+                    <tr>
+                        <th>Mois</th>
+                        <th>Année</th>
+                        <th>Prêt</th>
+                        <th>Prévision</th>
+                        <th>Intérêt</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
 
-    <button onclick="chargerTableau()">Voir le tableau</button>
-
-    <table id="result">
-        <thead>
-            <tr>
-                <th>Mois</th>
-                <th>Année</th>
-                <th>Prêt</th>
-                <th>Prévision</th>
-                <th>Intérêt</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-
-    <h2>Évolution des intérêts</h2>
-    <canvas id="interetChart" width="800" height="400"></canvas>
-
+            <h2>Évolution des intérêts</h2>
+            <canvas id="interetChart" width="800" height="400"></canvas>
+        </main>
+    </div>
     <script>
         const apiBase = "http://localhost:81/tp-flightphp-crud-MVC/finalExamS4_ETU003130_ETU003158_ETU003160/ws";
         let chart = null;

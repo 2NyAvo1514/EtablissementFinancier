@@ -4,41 +4,41 @@
 <head>
   <meta charset="UTF-8" />
   <title>Gestion des Taux</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; }
-    input, button, select { margin: 5px; padding: 5px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background-color: #f2f2f2; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <h1>Insertion de Taux</h1>
+  <div class="container">
+    <div class="sidebar">
+      <?php include 'navbar.html'; ?>
+    </div>
 
-  <label for="dateTaux">Date de modification du taux</label>
-  <input type="date" id="dateTaux" required />
-
-  <br />
-
-  <label for="idTypeClient">Type de compte</label>
-  <select id="idTypeClient" required>
-    <option value="">-- Sélectionnez --</option>
-  </select>
-
-  <br />
-
-  <label for="idTypePret">Type de prêt</label>
-  <select id="idTypePret" required>
-    <option value="">-- Sélectionnez --</option>
-  </select>
-
-  <br />
-
-  <label for="valeur">Valeur du taux (%)</label>
-  <input type="number" id="valeur" step="0.01" required />
-
-  <button onclick="createTaux()">Ajouter</button>
+    <main class="content">
+      <h1>Insertion de Taux</h1>
+      <br>
+      <label for="dateTaux">Date de modification du taux</label>
+      <br>
+      <input type="date" id="dateTaux" required />
+      <br>
+      <label for="idTypeClient">Type de compte</label>
+      <br>
+      <select id="idTypeClient" required>
+        <option value="">-- Sélectionnez --</option>
+      </select>
+      <br>
+      <label for="idTypePret">Type de prêt</label>
+      <br>
+      <select id="idTypePret" required>
+        <option value="">-- Sélectionnez --</option>
+      </select>
+      <br>
+      <label for="valeur">Valeur du taux (%)</label>
+      <br>
+      <input type="number" id="valeur" step="0.01" required />
+      <br>
+      <button onclick="createTaux()">Ajouter</button>
+    </main>
+  </div>
 
   <script>
     const apiBase =
@@ -79,7 +79,6 @@
 
       ajax("POST", "/taux", data, () => {
         alert("Taux ajouté !");
-        document.querySelector("form")?.reset?.();
       });
     }
 
@@ -96,7 +95,6 @@
       });
     }
 
-
     function chargeTypePret() {
       ajax("GET", "/typePret", null, (data) => {
         const select = document.getElementById("idTypePret");
@@ -109,6 +107,7 @@
         });
       });
     }
+
     chargeTypeClient();
     chargeTypePret();
   </script>

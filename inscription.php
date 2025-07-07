@@ -3,73 +3,62 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Gestion des étudiants</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            padding: 20px;
-        }
-
-        input,
-        button {
-            margin: 5px;
-            padding: 5px;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <title>Inscription</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>Insertion de client</h1>
-    <label for="nomClient">Nom</label>
-    <input type="text" name="nom" id="nomClient">
-    <br>
-    <label for="mail">E-mail</label>
-    <input type="email" name="mail" id="mail">
-    <br>
-    <label for="mdp">Mot de passe</label>
-    <input type="password" name="mdp" id="mdp">
-    <br>
-    <label for="dateNaissance">Date de Naissance</label>
-    <input type="date" name="dateNaissance" id="dateNaissance">
-    <br>
-    <label for="idTypeClient">Choisir votre type de compte</label>
-    <select name="idTypeClient" id="idTypeClient">
-        <option value=""></option>
-    </select>
-    <br>
-    <label for="numeroIdentification">Insérer votre numéro d'identification (CIN ou NIF)</label>
-    <input type="text" id="numeroIdentification" name="numeroIdentification">
-    <button onclick='createClient()'>Ajouter</button>
+    <div class="container">
+        <?php include 'navbar.html'; ?>
+
+        <main class="content">
+            <h1>Insertion de client</h1>
+
+            <label for="nomClient">Nom</label>
+            <br>
+            <input type="text" id="nomClient" name="nom" required><br>
+            <br>
+            <label for="mail">E-mail</label>
+            <br>
+            <input type="email" id="mail" name="mail" required><br>
+            <br>
+            <label for="mdp">Mot de passe</label>
+            <br>
+            <input type="password" id="mdp" name="mdp" required><br>
+            <br>
+            <label for="dateNaissance">Date de Naissance</label>
+            <br>
+            <input type="date" id="dateNaissance" name="dateNaissance" required><br>
+            <br>
+            <label for="idTypeClient">Choisir votre type de compte</label>
+            <br>
+            <select id="idTypeClient" name="idTypeClient" required>
+                <option value="">-- Sélectionnez --</option>
+            </select><br>
+            <br>
+            <label for="numeroIdentification">Numéro d'identification (CIN ou NIF)</label>
+            <br>
+            <input type="text" id="numeroIdentification" name="numeroIdentification" required><br>
+            <br>
+            <button onclick="createClient()">Ajouter</button>
+        </main>
+    </div>
 
     <script>
-
-
         const apiBase = "http://localhost:81/tp-flightphp-crud-MVC/finalExamS4_ETU003130_ETU003158_ETU003160/ws";
 
         function ajax(method, url, data, callback) {
             const xhr = new XMLHttpRequest();
             xhr.open(method, apiBase + url, true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
             xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    callback(JSON.parse(xhr.responseText));
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        callback(JSON.parse(xhr.responseText));
+                    } else {
+                        alert("Erreur " + xhr.status + " : " + xhr.responseText);
+                    }
                 }
             };
             xhr.send(data);
@@ -83,11 +72,22 @@
             const numeroIdentification = document.getElementById("numeroIdentification").value;
             const idTypeClient = document.getElementById("idTypeClient").value;
 
-            const data = `nom=${encodeURIComponent(nom)}&mail=${encodeURIComponent(mail)}&mdp=${encodeURIComponent(mdp)}&dateNaissance=${encodeURIComponent(dateNaissance)}&numeroIdentification=${encodeURIComponent(numeroIdentification)}&idTypeClient=${encodeURIComponent(idTypeClient)}`;
+            if (!nom || !mail || !mdp || !dateNaissance || !numeroIdentification || !idTypeClient) {
+                alert("Veuillez remplir tous les champs.");
+                return;
+            }
 
-            ajax("POST", "/clients", data, () => {
-                // resetForm();
-                chargertypeClient();
+            const data =
+                `nom=${encodeURIComponent(nom)}` +
+                `&mail=${encodeURIComponent(mail)}` +
+                `&mdp=${encodeURIComponent(mdp)}` +
+                `&dateNaissance=${encodeURIComponent(dateNaissance)}` +
+                `&numeroIdentification=${encodeURIComponent(numeroIdentification)}` +
+                `&idTypeClient=${encodeURIComponent(idTypeClient)}`;
+
+            ajax("POST", "/clients", data, (response) => {
+                alert("Client ajouté avec succès !");
+                resetForm();
             });
         }
 
@@ -105,9 +105,17 @@
             });
         }
 
+        function resetForm() {
+            document.getElementById("nomClient").value = "";
+            document.getElementById("mail").value = "";
+            document.getElementById("mdp").value = "";
+            document.getElementById("dateNaissance").value = "";
+            document.getElementById("numeroIdentification").value = "";
+            document.getElementById("idTypeClient").value = "";
+        }
+
         chargertypeClient();
     </script>
-
 </body>
 
 </html>
