@@ -6,8 +6,8 @@ require_once __DIR__ . '/../helpers/Utils.php';
 
 class ClientController {
     public static function getAll() {
-        $clients = ::getAll();
-        Flight::json($etudiants);
+        $clients = ClientModel::getAll();
+        Flight::json($clients);
     }
 
     public static function getById($id) {
