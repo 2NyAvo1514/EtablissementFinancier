@@ -47,7 +47,7 @@
     <input type="password" name="mdp" id="mdp">
     <br>
     <label for="dateNaissance">Date de Naissance</label>
-    <input type="date" name="dateNaissance">
+    <input type="date" name="dateNaissance" id="dateNaissance">
     <br>
     <label for="idTypeClient">Choisir votre type de compte</label>
     <select name="idTypeClient" id="idTypeClient">
@@ -55,8 +55,12 @@
     </select>
     <br>
     <label for="numeroIdentification">Insérer votre numéro d'identification (CIN ou NIF)</label>
-    <input type="text" value="numeroIdentification" id="numeroIdentification">
+    <input type="text" id="numeroIdentification" id="numeroIdentification">
+    <button onclick='createClient()'>Ajouter</button>
+
     <script>
+
+
         const apiBase = "http://localhost:81/tp-flightphp-crud-MVC/finalExamS4_ETU003130_ETU003158_ETU003160/ws";
 
         function ajax(method, url, data, callback) {
@@ -71,21 +75,35 @@
             xhr.send(data);
         }
 
+        function createClient() {
+            const nom = document.getElementById("nomClient").value;
+            const mail = document.getElementById("mail").value;
+            const mdp = document.getElementById("mdp").value;
+            const dateNaissance = document.getElementById("dateNaissance").value;
+            const numeroIdentification = document.getElementById("numeroIdentification").value;
+
+            const data = `nom=${encodeURIComponent(nom)}&mail=${encodeURIComponent(mail)}&mdp=${encodeURIComponent(mdp)}&dateNaissance=${encodeURIComponent(dateNaissance)}&numeroIdentification=${encodeURIComponent(numeroIdentification)}`;
+
+            ajax("POST", "/clients", data, () => {
+                // resetForm();
+                chargertypeClient();
+            });
+        }
+
         function chargertypeClient() {
             ajax("GET", "/typeClients", null, (data) => {
                 const select = document.getElementById("idTypeClient");
-                select.innerHTML = '<option value="">-- Sélectionnez --</option>'; 
+                select.innerHTML = '<option value="">-- Sélectionnez --</option>';
 
                 data.forEach(item => {
                     const opt = document.createElement("option");
-                    opt.value = item.idTypeClient;   
-                    opt.textContent = item.typeClient; 
+                    opt.value = item.idTypeClient;
+                    opt.textContent = item.typeClient;
                     select.appendChild(opt);
                 });
             });
         }
 
-        function createClient
         chargertypeClient();
     </script>
 
