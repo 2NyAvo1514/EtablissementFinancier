@@ -139,7 +139,7 @@ body {
 
 .content p {
   color: #4a5568;
-  font-size: 1.2em;
+  font-size: 1.8em;
   line-height: 1.8;
   margin-top: 30px;
   padding: 25px;
@@ -206,7 +206,7 @@ thead th {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 0.9em;
+  font-size: 1.0em;
   border-bottom: 2px solid #dc2626;
   text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
@@ -324,7 +324,7 @@ input[type="search"],
 input[type="date"],
 textarea,
 select {
-  width: 25%;
+  width: 20%;
   padding: 15px 20px;
   border: 2px solid #e2e8f0;
   border-radius: 5px;
@@ -470,5 +470,11 @@ form::before {
  background: linear-gradient(135deg, #017d17 0%, #23a406 100%);
 }
 
+.delete{
+ background: linear-gradient(135deg, #7d0101 0%, #c30202 100%);
+}
 
 
+.content{
+
+}

@@ -14,24 +14,25 @@
         <?php include 'navbar.html'; ?>
         <main class="content">
             <h1>Réalisation des intérêts par mois</h1>
-            <br>
+            <hr>
             <label for="moisDebut">Mois Début</label>
             <br>
-            <input type="number" name="moisDebut" id="moisDebut" min="1" max="12">
+            <input type="number" name="moisDebut" id="moisDebut" min="1" max="12" placeholder="1   à   12">
             <br>
             <label for="anneeDebut">Année Début</label>
             <br>
-            <input type="number" name="anneeDebut" id="anneeDebut">
+            <input type="number" name="anneeDebut" id="anneeDebut" placeholder="ex: 2000">
             <br>
             <label for="moisFin">Mois Fin</label>
             <br>
-            <input type="number" name="moisFin" id="moisFin" min="1" max="12">
+            <input type="number" name="moisFin" id="moisFin" min="1" max="12" placeholder="1   à   12" >
             <br>
             <label for="anneeFin">Année Fin</label>
             <br>
-            <input type="number" name="anneeFin" id="anneeFin">
+            <input type="number" name="anneeFin" id="anneeFin" placeholder="ex: 2000">
             <br>
-            <button onclick="chargerTableau()">Voir le tableau</button>
+            <br>
+            <button onclick="chargerTableau()" class="ajouter">Voir le tableau</button>
             <h3 id="totalInteret">Total des intérêts : 0 Ar</h3>
             <table id="result">
                 <thead>
@@ -113,7 +114,7 @@
         function afficherGraphique(labels, data) {
             const ctx = document.getElementById('interetChart').getContext('2d');
 
-            if (chart) chart.destroy(); // détruire l'ancien graphique s'il existe
+            if (chart) chart.destroy(); 
 
             chart = new Chart(ctx, {
                 type: 'line',

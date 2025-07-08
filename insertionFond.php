@@ -14,11 +14,12 @@
 
         <main class="content">
             <h1>Insertion de Fond</h1>
-
+            <hr>
             <label for="valeur">Valeur du fond</label>
-            <input type="number" id="valeur" name="solde" />
-
-            <button onclick="createFond()">Ajouter</button>
+            <br>
+            <input type="number" id="valeur" name="solde" placeholder="ex: 1000000"/> Ar
+            <br><br>
+            <button class="ajouter" onclick="createFond()">Ajouter</button>
         </main>
     </div>
 

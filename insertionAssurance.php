@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <div class="sidebar"><?php include 'navbar.html'; ?></div>
-
+        <hr>
         <main class="content">
             <h1>Insertion d'Assurance</h1>
             <br>
@@ -34,7 +34,20 @@
             <br>
             <input type="number" id="valeur" step="0.01" required>
             <br>
-            <button onclick="createAssurance()">Ajouter</button>
+            <br>
+            <button class="ajouter" onclick="createAssurance()">Ajouter</button>
+            <hr>
+            <h3>Assurance actuelle</h3>
+            <table id="table-taux">
+                <thead>
+                    <tr>
+                        <th>Type Client</th>
+                        <th>Type Pret</th>
+                        <th>Valeur taux en %</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </main>
     </div>
     <script>
@@ -106,6 +119,33 @@
                 });
             });
         }
+
+        function chargeLastAssurance() {
+            ajax("GET", "/lastAssurance", null, (data) => {
+                const tbody = document.querySelector("#table-taux tbody");
+                tbody.innerHTML = "";
+
+                data.forEach(e => {
+                    ajax("GET", `/typeClients/${e.idTypeClient}`, null, (typeClientData) => {
+                        const typeClientName = typeClientData.typeClient;
+
+                        ajax("GET", `/typePret/${e.idTypePret}`, null, (typePretData) => {
+                            const typePretName = typePretData.typePret;
+
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = `
+            <td>${typeClientName}</td>
+            <td>${typePretName}</td>
+            <td>${e.valeur} %</td>
+          `;
+                            tbody.appendChild(tr);
+                        });
+                    });
+                });
+            });
+        }
+        chargeLastAssurance();
+
         chargeTypeClient();
         chargeTypePret();
     </script>

@@ -14,7 +14,7 @@
         <?php include 'navbar.html'; ?>
         <main class="content">
             <h1>Prévision des intérêts par mois</h1>
-
+            <hr>
             <label for="moisDebut">Mois Début</label>
             <br>
             <input type="number" name="moisDebut" id="moisDebut" min="1" max="12">
@@ -31,7 +31,7 @@
             <br>
             <input type="number" name="anneeFin" id="anneeFin">
             <br>
-            <button onclick="chargerTableau()">Voir le tableau</button>
+            <button onclick="chargerTableau()" class="ajouter">Voir le tableau</button>
 
             <h3 id="totalInteret">Total des intérêts : 0 Ar</h3>
 
@@ -101,7 +101,6 @@
                     `;
                     tbody.appendChild(tr);
 
-                    // Données pour le graphique
                     labels.push(`${l.mois}/${l.annee}`);
                     valeursInterets.push(Number(l.interet || 0));
                 });
@@ -114,7 +113,7 @@
         function afficherGraphique(labels, data) {
             const ctx = document.getElementById('interetChart').getContext('2d');
 
-            if (chart) chart.destroy(); 
+            if (chart) chart.destroy();
 
             chart = new Chart(ctx, {
                 type: 'line',

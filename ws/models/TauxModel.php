@@ -11,4 +11,11 @@ class TauxModel
         $stmt->execute([$data->idTypeClient, $data->idTypePret, $data->valeur, $data->dateTaux]);
         return $db->lastInsertId();
     }
+
+    public static function getLastTaux()
+    {
+        $db = getDB();
+        $stmt = $db->query("SELECT * FROM (SELECT * , ROW_NUMBER() OVER(PARTITION BY idTypeClient, idTypePret ORDER BY dateTaux DESC)AS rn FROM banque_Taux) sub WHERE rn = 1;");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

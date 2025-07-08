@@ -8,6 +8,8 @@ require_once __DIR__ . '/../controllers/FondController.php';
 require_once __DIR__ . '/../controllers/AssuranceController.php';
 require_once __DIR__ . '/../controllers/RemboursementController.php';
 require_once __DIR__ . '/../controllers/ValidationController.php';
+require_once __DIR__ . '/../controllers/DelaiController.php';
+require_once __DIR__ . '/../controllers/PretController.php';
 
 
 
@@ -29,11 +31,16 @@ Flight::route('GET /dashboard/interets', ['DashboardController', 'getInteretsInt
 Flight::route('GET /dashboard/interetsRealisation', ['DashboardController', 'getInteretsRealisationInterval']);
 
 Flight::route('GET /typePret', ['TypePretController', 'getAll']);
+Flight::route('GET /typePret/@id', ['TypePretController', 'getById']);
 Flight::route('POST /taux', ['TauxController', 'create']);
+Flight::route('GET /lastTaux', ['TauxController', 'getLastTaux']);
+
 
 Flight::route('POST /fond', ['FondController', 'create']);
 
 Flight::route('POST /assurance', ['AssuranceController', 'create']);
+Flight::route('GET /lastAssurance', ['AssuranceController', 'getLastAssurance']);
+
 
 Flight::route('POST /remboursements', ['RemboursementController', 'create']);
 
@@ -44,5 +51,10 @@ Flight::route('GET /listValide', ['ValidationController', 'getAllValide']);
 Flight::route('GET /genererPDF/@idPret', ['ValidationController', 'genererPDF']);
 
 
+Flight::route('POST /delais', ['DelaiController', 'create']);
+Flight::route('GET /lastDelais', ['DelaiController', 'getLastDelai']);
 
-
+$Pctrl = new PretController();
+Flight::route('GET /client',['PretController','goToPret']);
+Flight::route('GET /typePret',['PretController','getTypesPret']);
+Flight::route('POST /pret', ['PretController', 'executePret']);

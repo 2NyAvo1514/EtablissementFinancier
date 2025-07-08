@@ -13,7 +13,7 @@
 
         <main class="content">
             <h1>Insertion de Remboursement</h1>
-
+<hr>
             <label for="montant">Montant</label>
             <br>
             <input type="number" id="montant" name="montant" required><br>
@@ -26,7 +26,7 @@
             <br>
             <input type="text" id="numeroIdentification" name="numeroIdentification" required><br>
             <br>
-            <button onclick="createRemboursement()">Ajouter</button>
+            <button class="ajouter" onclick="createRemboursement()">Ajouter</button>
         </main>
     </div>
 

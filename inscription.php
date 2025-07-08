@@ -12,8 +12,9 @@
         <?php include 'navbar.html'; ?>
 
         <main class="content">
-            <h1>Insertion de client</h1>
 
+            <h1>Insertion de client</h1>
+            <hr>
             <label for="nomClient">Nom</label>
             <br>
             <input type="text" id="nomClient" name="nom" required><br>
@@ -38,7 +39,8 @@
             <br>
             <label for="numeroIdentification">Numéro d'identification (CIN ou NIF)</label>
             <br>
-            <input type="text" id="numeroIdentification" name="numeroIdentification" required><br>
+            <input type="text" id="numeroIdentification" name="numeroIdentification" placeholder="ex: 125-120-150"
+                required><br>
             <br>
             <button onclick="createClient()" class="ajouter">Ajouter</button>
         </main>

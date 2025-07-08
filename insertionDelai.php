@@ -14,10 +14,10 @@
     </div>
 
     <main class="content">
-      <h1>Insertion de Taux</h1>
+      <h1>Insertion de nouveau Délai</h1>
       <hr>
       <br>
-      <label for="dateTaux">Date de modification du taux</label>
+      <label for="dateTaux">Date de modification du delai</label>
       <br>
       <input type="date" id="dateTaux" required />
       <br>
@@ -33,20 +33,20 @@
         <option value="">-- Sélectionnez --</option>
       </select>
       <br>
-      <label for="valeur">Valeur du taux (%)</label>
+      <label for="valeur">Durée de délai</label>
       <br>
       <input type="number" id="valeur" step="0.01" required />
       <br>
       <br>
       <button class="ajouter" onclick="createTaux()">Ajouter</button>
       <hr>
-      <h3>Taux actuelle</h3>
+      <h3>Délai actuelle</h3>
       <table id="table-taux">
         <thead>
           <tr>
             <th>Type Client</th>
             <th>Type Pret</th>
-            <th>Valeur taux en %</th>
+            <th>Duree en mois</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -90,11 +90,11 @@
       const data =
         `idTypeClient=${encodeURIComponent(idTypeClient)}` +
         `&idTypePret=${encodeURIComponent(idTypePret)}` +
-        `&dateTaux=${encodeURIComponent(dateTaux)}` +
-        `&valeur=${encodeURIComponent(valeur)}`;
+        `&dateDelai=${encodeURIComponent(dateTaux)}` +
+        `&duree=${encodeURIComponent(valeur)}`;
 
-      ajax("POST", "/taux", data, () => {
-        alert("Taux ajouté !");
+      ajax("POST", "/Delais", data, () => {
+        alert("Delai ajouté !");
       });
     }
 
@@ -124,8 +124,8 @@
       });
     }
 
-    function chargeLastTaux() {
-      ajax("GET", "/lastTaux", null, (data) => {
+    function chargeLastDelai() {
+      ajax("GET", "/lastDelais", null, (data) => {
         const tbody = document.querySelector("#table-taux tbody");
         tbody.innerHTML = "";
 
@@ -140,7 +140,7 @@
               tr.innerHTML = `
             <td>${typeClientName}</td>
             <td>${typePretName}</td>
-            <td>${e.valeur} %</td>
+            <td>${e.duree} </td>
           `;
               tbody.appendChild(tr);
             });
@@ -150,7 +150,7 @@
     }
 
 
-    chargeLastTaux();
+    chargeLastDelai();
     chargeTypeClient();
     chargeTypePret();
   </script>

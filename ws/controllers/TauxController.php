@@ -12,4 +12,10 @@ class TauxController {
         $id = TauxModel::create($data);
         Flight::json(['message' => 'Taux ajouté', 'id' => $id]);
     }
+
+    public static function getLastTaux()
+    {
+        $taux = TauxModel::getLastTaux();
+        Flight::json($taux);
+    }
 }

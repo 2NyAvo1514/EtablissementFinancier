@@ -12,7 +12,7 @@
     <div class="sidebar"><?php include 'navbar.html'; ?></div>
     <main class="content">
       <h1>Liste des prets validé</h1>
-
+    <hr>
       <table id="table-pret">
         <thead>
           <tr>
@@ -62,7 +62,7 @@
             <td>${e.descriptionPret}</td>
             <td>${e.datePret}</td>
             <td>
-                <button onclick='genererPDF(${e.idPret})'>Generer PDF</button>
+                <button class="delete" onclick='genererPDF(${e.idPret})'>Generer PDF</button>
             </td>
           `;
           tbody.appendChild(tr);

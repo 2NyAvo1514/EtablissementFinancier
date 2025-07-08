@@ -156,10 +156,12 @@ class ValidationModel
         }
     
         $tauxPourcent = self::getTaux($idPret);
-        $taux = $tauxPourcent / 100;
+        $tauxDurantDuree = $tauxPourcent / 12 * $nbrMois;
+        $taux = $tauxDurantDuree / 100;
     
         $assurancePourcent = self::getAssurance($idPret);
-        $assurance = $assurancePourcent / 100;
+        $assuranceDurantDuree = $assurancePourcent / 12 * $nbrMois;
+        $assurance = $assuranceDurantDuree / 100;
     
         // Insertion historique
         $stmt = $db->prepare("

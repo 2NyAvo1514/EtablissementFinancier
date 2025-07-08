@@ -10,4 +10,8 @@ class TypePretController {
         Flight::json($typeprets);
     }
 
+    public static function getById($id) {
+        $typepret = TypePretModel::getById($id);
+        Flight::json($typepret);
+    }
 }

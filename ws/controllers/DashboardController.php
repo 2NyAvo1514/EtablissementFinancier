@@ -56,7 +56,7 @@ class DashboardController
             $y = (int) $d->format('Y');
             $pret = DashboardModel::getSommeMontantPret($m, $y);
             $final = DashboardModel::getSommeMontantRealise($m, $y);
-            $interet = DashboardModel::calculInteretPrevision($m, $y);
+            $interet = DashboardModel::calculInteretRealisation($m, $y);
 
             $result[] = [
                 'mois' => $m,

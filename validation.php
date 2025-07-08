@@ -14,8 +14,8 @@
       <?php include 'navbar.html'; ?>
     </div>
     <main class="content">
-      <h1>Liste des prets non valide</h1>
-
+      <h1>Liste des prets non validé</h1>
+      <hr>
       <table id="table-pret">
         <thead>
           <tr>
@@ -32,7 +32,6 @@
 
     </main>
   </div>
-
 
   <script>
     const apiBase = "http://localhost:81/tp-flightphp-crud-MVC/finalExamS4_ETU003130_ETU003158_ETU003160/ws";
@@ -63,8 +62,9 @@
             <td>${e.datePret}</td>
             <td><input type="date" name="dateValidation"></td>
             <td>
-                <button onclick='validerpret(${e.idPret},this)'>Valider</button>
-                <button onclick='rejetterpret(${e.idPret},this)'>Rejetter</button>
+                <button class="ajouter" onclick='validerpret(${e.idPret},this)'>Valider</button>
+                <br><br>
+                <button class="delete" onclick='rejetterpret(${e.idPret},this)'>Rejetter</button>
             </td>
           `;
           tbody.appendChild(tr);
