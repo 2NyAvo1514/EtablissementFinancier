@@ -47,3 +47,14 @@ INSERT INTO banque_Assurance (idTypeClient, idTypePret, valeur, dateAssurance) V
 (2, 1, 15, '2024-07-01'),    -- Assurance 15% sur prêt long terme entreprise
 (2, 2, 10, '2024-07-01'),    -- Assurance 10% sur prêt moyen terme entreprise
 (2, 3, 7,  '2024-07-01');    -- Assurance 7% sur prêt court terme entreprise
+
+INSERT INTO banque_Delais (idTypeClient, idTypePret, duree, dateDelais) VALUES
+-- Particulier (1)
+(1, 1, 6, '2024-07-01'),   -- Délai 6 mois pour prêt long terme particulier
+(1, 2, 3, '2024-07-01'),   -- Délai 3 mois pour prêt moyen terme particulier
+(1, 3, 0, '2024-07-01'),   -- Pas de délai pour prêt court terme particulier
+
+-- Entreprise (2)
+(2, 1, 12, '2024-07-01'),  -- Délai 12 mois pour prêt long terme entreprise
+(2, 2, 6, '2024-07-01'),   -- Délai 6 mois pour prêt moyen terme entreprise
+(2, 3, 1, '2024-07-01');   -- Délai 1 mois pour prêt court terme entreprise

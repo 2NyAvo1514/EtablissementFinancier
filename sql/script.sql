@@ -67,6 +67,16 @@ CREATE TABLE banque_Assurance (
     FOREIGN KEY (idTypePret) REFERENCES banque_TypePret(id)
 );
 
+CREATE TABLE banque_Delais (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idTypeClient INT,
+    idTypePret INT,
+    duree INT, 
+    dateDelais DATE,
+    FOREIGN KEY (idTypeClient) REFERENCES banque_TypeClient(id),
+    FOREIGN KEY (idTypePret) REFERENCES banque_TypePret(id)
+);
+
 CREATE TABLE banque_HistoriqueMouvementSolde(
     id INT AUTO_INCREMENT PRIMARY KEY,
     idClient INT,

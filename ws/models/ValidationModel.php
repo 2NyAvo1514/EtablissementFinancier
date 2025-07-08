@@ -4,8 +4,7 @@ require_once(__DIR__ . '/../libs/fpdf.php');
 
 class ValidationModel
 {
-    public static function getAllValide()
-    {
+    public static function getAllValide(){
         $db = getDB();
         $stmt = $db->query("
             SELECT 
@@ -39,8 +38,7 @@ class ValidationModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function getAllInvalid()
-    {
+    public static function getAllInvalid(){
         $db = getDB();
         $stmt = $db->query("
             SELECT 
@@ -73,17 +71,76 @@ class ValidationModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // public static function valider($idPret, $dateValidation) {
+    //     $db = getDB();
+    
+    //     // 1. Récupérer les infos du prêt (montant, durée, etc.)
+    //     $stmtPret = $db->prepare("
+    //         SELECT p.id, p.nbrMois, p.montant
+    //         FROM banque_Pret p
+    //         WHERE p.id = ?
+    //     ");
+
+    //     $stmtPret->execute([$idPret]);
+    //     $pret = $stmtPret->fetch(PDO::FETCH_ASSOC);
+    
+    //     if (!$pret) {
+    //         throw new Exception("Prêt introuvable avec l'ID donné.");
+    //     }
+    
+    //     $nbrMois = $pret['nbrMois'];
+    //     $montant = $pret['montant'];
+    
+    //     if ($nbrMois <= 0) {
+    //         throw new Exception("Le nombre de mois doit être supérieur à 0.");
+    //     }
+    
+    //     // 2. Récupérer le taux applicable (le plus récent selon typeClient et typePret)
+    //     $tauxPourcent = self::getTaux($idPret); 
+    //     $taux = $tauxPourcent / 100;
+    
+    //     $assurancePourcent = self::getAssurance($idPret);
+    //     $assurance = $assurancePourcent /100 ;
+
+    //     // 3. Insérer dans banque_HistoriquePret
+    //     $stmt = $db->prepare("
+    //         INSERT INTO banque_HistoriquePret (idPret, statutValidation, dateValidation) 
+    //         VALUES (?, 1, ?)
+    //     ");
+    //     $stmt->execute([$idPret, $dateValidation]);
+    
+    //     // 4. Calcul du montant mensuel avec taux
+    //     $montantMensuel = round(($montant + ($montant * $taux) + ($montant * $assurance)) / $nbrMois, 2);
+    
+    //     // 5. Générer les lignes dans banque_Prevision
+    //     $date = new DateTime($dateValidation);
+    
+    //     $stmtPrev = $db->prepare("
+    //         INSERT INTO banque_Prevision (idPret, mois, annee, montantFinal)
+    //         VALUES (?, ?, ?, ?)
+    //     ");
+    
+    //     for ($i = 0; $i < $nbrMois; $i++) {
+    //         $mois = (int) $date->format('n');  // mois de 1 à 12
+    //         $annee = (int) $date->format('Y');
+    
+    //         $stmtPrev->execute([$idPret, $mois, $annee, $montantMensuel]);
+    
+    //         $date->modify('+1 month'); 
+    //     }
+    
+    //     return $db->lastInsertId(); 
+    // }
 
     public static function valider($idPret, $dateValidation) {
         $db = getDB();
     
-        // 1. Récupérer les infos du prêt (montant, durée, etc.)
         $stmtPret = $db->prepare("
-            SELECT p.id, p.nbrMois, p.montant
+            SELECT p.id, p.nbrMois, p.montant, c.idTypeClient, p.idTypePret
             FROM banque_Pret p
+            JOIN banque_Client c ON p.idClient = c.id
             WHERE p.id = ?
         ");
-
         $stmtPret->execute([$idPret]);
         $pret = $stmtPret->fetch(PDO::FETCH_ASSOC);
     
@@ -98,25 +155,27 @@ class ValidationModel
             throw new Exception("Le nombre de mois doit être supérieur à 0.");
         }
     
-        // 2. Récupérer le taux applicable (le plus récent selon typeClient et typePret)
-        $tauxPourcent = self::getTaux($idPret); 
+        $tauxPourcent = self::getTaux($idPret);
         $taux = $tauxPourcent / 100;
     
         $assurancePourcent = self::getAssurance($idPret);
-        $assurance = $assurancePourcent /100 ;
-
-        // 3. Insérer dans banque_HistoriquePret
+        $assurance = $assurancePourcent / 100;
+    
+        // Insertion historique
         $stmt = $db->prepare("
             INSERT INTO banque_HistoriquePret (idPret, statutValidation, dateValidation) 
             VALUES (?, 1, ?)
         ");
         $stmt->execute([$idPret, $dateValidation]);
+        $idHistorique = $db->lastInsertId();
     
-        // 4. Calcul du montant mensuel avec taux
         $montantMensuel = round(($montant + ($montant * $taux) + ($montant * $assurance)) / $nbrMois, 2);
     
-        // 5. Générer les lignes dans banque_Prevision
+        $delai = self::getDelais($idPret);
         $date = new DateTime($dateValidation);
+        if ($delai > 0) {
+            $date->modify("+{$delai} month");
+        }
     
         $stmtPrev = $db->prepare("
             INSERT INTO banque_Prevision (idPret, mois, annee, montantFinal)
@@ -124,16 +183,24 @@ class ValidationModel
         ");
     
         for ($i = 0; $i < $nbrMois; $i++) {
-            $mois = (int) $date->format('n');  // mois de 1 à 12
-            $annee = (int) $date->format('Y');
-    
-            $stmtPrev->execute([$idPret, $mois, $annee, $montantMensuel]);
-    
-            $date->modify('+1 month'); 
+            $mois = (int)$date->format('n');
+            $annee = (int)$date->format('Y');
+        
+            $res = $stmtPrev->execute([$idPret, $mois, $annee, $montantMensuel]);
+            if (!$res) {
+                $errorInfo = $stmtPrev->errorInfo();
+                error_log("❌ Erreur insertion Prevision : " . implode(" | ", $errorInfo));
+            } else {
+                error_log("✅ Insertion Prévision : $mois-$annee = $montantMensuel");
+            }
+        
+            $date->modify('+1 month');
         }
+        
     
-        return $db->lastInsertId(); 
+        return $idHistorique;
     }
+    
     
     
     private static function getTaux($idPret) {
@@ -182,6 +249,30 @@ class ValidationModel
         }
     
         return $result['assurance']; // ex: 10 => 10%
+    }
+
+    private static function getDelais($idPret) {
+        $db = getDB();
+    
+        $stmt = $db->prepare("
+            SELECT d.duree AS duree
+            FROM banque_Pret p
+            JOIN banque_Client c ON p.idClient = c.id
+            JOIN banque_TypePret tp ON p.idTypePret = tp.id
+            JOIN banque_TypeClient tc ON c.idTypeClient = tc.id
+            JOIN banque_Delais d ON d.idTypePret = tp.id AND d.idTypeClient = tc.id
+            WHERE p.id = ?
+            ORDER BY d.duree DESC
+            LIMIT 1
+        ");
+        $stmt->execute([$idPret]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        if (!$result) {
+            throw new Exception("Delais introuvable pour le prêt ID $idPret.");
+        }
+    
+        return  (int)$result['duree']; 
     }
     
     public static function rejetter($idPret, $dateValidation) {
