@@ -10,8 +10,8 @@ require_once __DIR__ . '/../controllers/RemboursementController.php';
 require_once __DIR__ . '/../controllers/ValidationController.php';
 require_once __DIR__ . '/../controllers/DelaiController.php';
 require_once __DIR__ . '/../controllers/PretController.php';
-
-
+require_once __DIR__ . '/../controllers/ComparaisonController.php';
+require_once __DIR__ . '/../controllers/SimulationController.php';
 
 
 
@@ -29,6 +29,7 @@ Flight::route('DELETE /typeClients/@id', ['TypeClientController', 'delete']);
 
 Flight::route('GET /dashboard/interets', ['DashboardController', 'getInteretsInterval']);
 Flight::route('GET /dashboard/interetsRealisation', ['DashboardController', 'getInteretsRealisationInterval']);
+
 
 Flight::route('GET /typePret', ['TypePretController', 'getAll']);
 Flight::route('GET /typePret/@id', ['TypePretController', 'getById']);
@@ -58,3 +59,11 @@ $Pctrl = new PretController();
 Flight::route('GET /client',['PretController','goToPret']);
 Flight::route('GET /typePret',['PretController','getTypesPret']);
 Flight::route('POST /pret', ['PretController', 'executePret']);
+
+
+Flight::route('GET /comparaison',['ComparaisonController','getSimulation']);
+Flight::route('GET /simulations/@id', ['ComparaisonController', 'getSimulationById']);
+
+
+Flight::route('POST /simulation',['SimulationController','createSimulation']) ;
+Flight::route('GET /taux',['TauxController','prendreTaux']);

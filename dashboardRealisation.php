@@ -42,6 +42,8 @@
                         <th>Prêt</th>
                         <th>Réalisation</th>
                         <th>Intérêt</th>
+                        <th>Montant à portée</th>
+
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -53,6 +55,8 @@
     </div>
     <script>
         const apiBase = "http://localhost:81/tp-flightphp-crud-MVC/finalExamS4_ETU003130_ETU003158_ETU003160/ws";
+    // const apiBase = "/ETU003160/t/finalExamS4_ETU003130_ETU003158_ETU003160/ws";
+
         let chart = null;
 
         function ajax(method, url, data, cb) {
@@ -97,6 +101,8 @@
                         <td>${Number(l.pret || 0).toFixed(2)}</td>
                         <td>${Number(l.final || 0).toFixed(2)}</td>
                         <td>${Number(l.interet || 0).toFixed(2)}</td>
+                        <td>${Number(l.disponible || 0).toFixed(2)}</td>
+
                     `;
                     tbody.appendChild(tr);
 

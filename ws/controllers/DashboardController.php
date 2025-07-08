@@ -43,30 +43,67 @@ class DashboardController
         Flight::json($result);
     }
 
-        public static function getInteretsRealisationInterval()
-    {
-        $q = Flight::request()->query;
-        $start = new DateTime($q['ad'] . '-' . $q['md'] . '-01');
-        $end = new DateTime($q['af'] . '-' . $q['mf'] . '-01');
-        $end->modify('last day of this month');
-        $result = [];
+    public static function getInteretsRealisationInterval()
+{
+    $q = Flight::request()->query;
+    $start = new DateTime($q['ad'] . '-' . $q['md'] . '-01');
+    $end = new DateTime($q['af'] . '-' . $q['mf'] . '-01');
+    $end->modify('last day of this month');
 
-        for ($d = clone $start; $d <= $end; $d->modify('+1 month')) {
-            $m = (int) $d->format('n');
-            $y = (int) $d->format('Y');
-            $pret = DashboardModel::getSommeMontantPret($m, $y);
-            $final = DashboardModel::getSommeMontantRealise($m, $y);
-            $interet = DashboardModel::calculInteretRealisation($m, $y);
+    $result = [];
 
-            $result[] = [
-                'mois' => $m,
-                'annee' => $y,
-                'interet' => $interet,
-                'pret' => $pret,
-                'final' => $final
-            ];
-        }
+    $soldeInitial = DashboardModel::getSoldeInitial();
 
-        Flight::json($result);
+    for ($d = clone $start; $d <= $end; $d->modify('+1 month')) {
+        $m = (int) $d->format('n');
+        $y = (int) $d->format('Y');
+
+        $pret = DashboardModel::getSommeMontantPret($m, $y);
+        $remb = DashboardModel::getSommeMontantRealise($m, $y);
+        $interet = $remb - $pret;
+
+        $cumulPrets = DashboardModel::getCumulMontantPretJusqua($m, $y);
+        $cumulRemb = DashboardModel::getCumulMontantRemboursementJusqua($m, $y);
+        $dispo = $soldeInitial - $cumulPrets + $cumulRemb;
+
+        $result[] = [
+            'mois' => $m,
+            'annee' => $y,
+            'pret' => $pret,
+            'final' => $remb,
+            'interet' => $interet,
+            'disponible' => $dispo
+        ];
     }
+
+    Flight::json($result);
+}
+
+
+    //     public static function getInteretsRealisationInterval()
+    // {
+    //     $q = Flight::request()->query;
+    //     $start = new DateTime($q['ad'] . '-' . $q['md'] . '-01');
+    //     $end = new DateTime($q['af'] . '-' . $q['mf'] . '-01');
+    //     $end->modify('last day of this month');
+    //     $result = [];
+
+    //     for ($d = clone $start; $d <= $end; $d->modify('+1 month')) {
+    //         $m = (int) $d->format('n');
+    //         $y = (int) $d->format('Y');
+    //         $pret = DashboardModel::getSommeMontantPret($m, $y);
+    //         $final = DashboardModel::getSommeMontantRealise($m, $y);
+    //         $interet = DashboardModel::calculInteretRealisation($m, $y);
+
+    //         $result[] = [
+    //             'mois' => $m,
+    //             'annee' => $y,
+    //             'interet' => $interet,
+    //             'pret' => $pret,
+    //             'final' => $final
+    //         ];
+    //     }
+
+    //     Flight::json($result);
+    // }
 }

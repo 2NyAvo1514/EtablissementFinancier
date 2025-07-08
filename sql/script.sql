@@ -137,3 +137,13 @@ CREATE TABLE banque_Delais (
     FOREIGN KEY (idTypeClient) REFERENCES banque_TypeClient(id),
     FOREIGN KEY (idTypePret) REFERENCES banque_TypePret(id)
 );
+
+CREATE TABLE banque_Simulation (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+        idTypeClient INT,
+        idTypePret INT,
+        nbrMois INT,
+        montant DECIMAL(10,2),
+        FOREIGN KEY (idTypeClient) REFERENCES banque_TypeClient (id),
+        FOREIGN KEY (idTypePret) REFERENCES banque_TypePret (id)
+);

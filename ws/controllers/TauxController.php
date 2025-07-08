@@ -13,6 +13,11 @@ class TauxController {
         Flight::json(['message' => 'Taux ajouté', 'id' => $id]);
     }
 
+    public static function prendreTaux(){
+        $taux = TauxModel::getAllTaux();
+        Flight::json($taux);
+    }
+
     public static function getLastTaux()
     {
         $taux = TauxModel::getLastTaux();

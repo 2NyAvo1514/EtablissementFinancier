@@ -35,6 +35,8 @@
 
   <script>
     const apiBase = "http://localhost:81/tp-flightphp-crud-MVC/finalExamS4_ETU003130_ETU003158_ETU003160/ws";
+    // const apiBase = "/ETU003160/t/finalExamS4_ETU003130_ETU003158_ETU003160/ws";
+
 
     function ajax(method, url, data, callback) {
       const xhr = new XMLHttpRequest();

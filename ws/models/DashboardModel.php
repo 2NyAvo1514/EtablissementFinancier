@@ -41,7 +41,6 @@ class DashboardModel
         FROM banque_HistoriqueMouvementSolde
         WHERE MONTH(dateMouvement) = ? 
           AND YEAR(dateMouvement) = ?
-          AND statutValidation = 1
           AND idTypeMouvementSolde = 2
     ");
         $stmt->execute([$mois, $annee]);
@@ -52,14 +51,21 @@ class DashboardModel
     {
         $db = getDB();
         $stmt = $db->prepare("
-        SELECT SUM(montant) AS total 
-        FROM banque_Pret 
-        WHERE MONTH(datePret) = ? 
-          AND YEAR(datepret) = ?
+        SELECT SUM(p.montant) AS total
+        FROM banque_Pret p
+        JOIN banque_HistoriquePret h ON p.id = h.idPret
+        WHERE h.statutValidation = 1
+          AND MONTH(p.datePret) = :mois
+          AND YEAR(p.datePret) = :annee
     ");
-        $stmt->execute([$mois, $annee]);
-        return $stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+        $stmt->execute([
+            'mois' => $mois,
+            'annee' => $annee
+        ]);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (float) ($res['total'] ?? 0);
     }
+
 
     public static function calculInteretPrevision($mois, $annee): float
     {
@@ -74,5 +80,49 @@ class DashboardModel
         $montantFinal = self::getSommeMontantRealise($mois, $annee);
         return $montantFinal - $montantPret;
     }
+    public static function getSoldeInitial(): float
+    {
+        $db = getDB();
+        $stmt = $db->query("SELECT solde FROM banque_Fond LIMIT 1");
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $res ? floatval($res['solde']) : 0.0;
+    }
+
+    public static function getCumulMontantPretJusqua($mois, $annee): float
+    {
+        $db = getDB();
+        $stmt = $db->prepare("
+        SELECT SUM(p.montant) AS total
+FROM banque_Pret p
+JOIN banque_HistoriquePret h ON p.id = h.idPret
+WHERE h.statutValidation = 1
+AND (YEAR(p.datePret) < :annee OR (YEAR(p.datePret) = 2025 AND MONTH(p.datePret) <= :mois))
+    ");
+        $stmt->execute([
+            'mois' => $mois,
+            'annee' => $annee
+        ]);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $res ? floatval($res['total']) : 0.0;
+    }
+
+    public static function getCumulMontantRemboursementJusqua($mois, $annee): float
+    {
+        $db = getDB();
+        $stmt = $db->prepare("
+        SELECT SUM(montant) as total
+        FROM banque_historiqueMouvementSolde
+        WHERE YEAR(dateMouvement) < :annee 
+           OR (YEAR(dateMouvement) = :annee AND MONTH(dateMouvement) <= :mois) AND idTypeMouvementSolde = 2
+    ");
+        $stmt->execute([
+            'mois' => $mois,
+            'annee' => $annee
+        ]);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $res ? floatval($res['total']) : 0.0;
+    }
+
+
 
 }
